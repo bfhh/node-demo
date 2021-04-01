@@ -30,7 +30,7 @@ var powerData = {
     height: 600
 }
 
-const time = powerData.time
+let time = powerData.time
 const um = powerData.um
 const usm = powerData.usm
 const im = powerData.im
@@ -45,13 +45,42 @@ const hash = powerData.hash
 const height = powerData.height
 
 tableName = 21
+//插入数据
 //这里不知道为什么数字形式的表格一定要这种拼接方式
 const insertSql2 = 'insert into`' + `${tableName}` + '` (time, um, usm, im, pfs, ps, qs, ss, d, wpp, wqp, hash, height ) values' + `(${time},${um},${usm},${im},${pfs},${ps},${qs},${ss},${d},${wpp},${wqp},'${hash}',${height})`
 
-con.query(insertSql2, (err, result) => {
+//查询语数据
+let querySql = 'select * from`' + `${tableName}` + '`where 1=1 '
+
+if (time) {
+    time = 202103081830
+    querySql += `and time='${time}'`
+}
+
+//查询总数
+let countSql = 'select count(id) from `' + `${tableName}` + '`where 1=1'
+
+//根据hash查询高度
+let txHash = `vf2ESzpXQj/TkbGh0IUNNeLz5AwYRunNi5AyA1/Y05k=`
+let sql = 'select height from `' + `${tableName}` + '`where 1=1 '
+if (hash) {
+    sql += `and hash='${txHash}'`
+}
+
+//分页查询
+pageSize = 3
+pageNumber = 5
+let pageSql = 'select * from `' + `${tableName}` + '`where 1=1 '
+let start = (pageNumber - 1) * pageSize
+pageSql += `Limit ${start},${pageSize}`
+
+con.query(sql, (err, result) => {
     if (err) {
         console.log(err)
         return
     }
     console.log(result)
+    //获取数量
+    //   console.log(result[0]['count(id)'])
+
 })

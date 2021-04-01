@@ -7,7 +7,7 @@ const {
     updateBlog,
     delBlog
 } = require('../controller/blog')
-const { SuccessModel, ErrorModel } = require('../model/resModel')
+const {SuccessModel, ErrorModel} = require('../model/resModel')
 const loginCheck = require('../middleware/loginCheck')
 
 router.get('/list', (req, res, next) => {

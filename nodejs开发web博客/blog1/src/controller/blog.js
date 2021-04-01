@@ -50,8 +50,6 @@ const deleteBlog = (id) => {
     return  true
 }
 
-
-
 //之前都是返回一个函数，但是这里返回一个对象，因为要向外暴露多个函数，可以扩展
 
 module.exports = {
