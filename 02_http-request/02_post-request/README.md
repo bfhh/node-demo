@@ -11,7 +11,7 @@ post请求数据一都比较大，一次性获取所有的数据不合适，所�
 ```js
 let postData = ""
 req.on('data', chunk => {
-	postData += chunk.toString()
+    postData += chunk.toString()
 })
 ```
 
@@ -23,4 +23,14 @@ req.on('end', () => {
 })
 ```
 
-这两个
+## JSON.stringfy
+
+```js
+res.end(
+    JSON.stringify(resData)
+)
+```
+
+res.end需要返回一个字符串，但是resData是一个对象，`JSON.stringify(resData)`就是讲一个对象转化为一个jSON格式的字符串，
+
+注意所有返回的数据都是字符串只不过字符串的格式有很多种
