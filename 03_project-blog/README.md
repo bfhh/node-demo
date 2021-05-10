@@ -131,22 +131,13 @@ const newBlog = (blogData = {}) => {
 
 逻辑更新博客几乎一样，只不过只需要传递博客id
 
-
-
-## 登录
-
-
-
 ## mysql创建表
 
 **创建数据库myblob**
 
 ```
-create database myblob;
+create database myblog;
 ```
-
-
-
 **用户表**
 
 ```
@@ -172,7 +163,204 @@ create table `myblog`.`blogs` (
 
 ```
 
+**用户表插入数据**
+
+```mysql
+insert into users(username,`password`,`realname`)	values('zhangsan','123','张三');
+
+insert into users(username,`password`,`realname`)	values('lisi','1234','李四');
+```
+
+**博客表插入数据**
+
+```mysql
+insert into  blogs(title,content,createtime,author)	values('标题A','内容A',1620607965476,'zhangsan');
+
+insert into  blogs(title,content,createtime,author)	values('标题B','内容B',1620608004165,'lisi');
+```
+
+## 初始化数据库配置
+
+首先根据`PACKAGE.JSON`中使用process判断当前的执行环境，线上还是测试
+
+```
+const env = process.env.NODE_ENV
+```
 
 
-​                 
 
+```
+cd 根目录
+mkdir conf &  touch db.js
+```
+
+线上环境和本地测试环境配置可能不一样，也有可能有一些其他的配置，所以选择向外暴露mysql配置信息
+
+## 封装数据库操作
+
+```
+cd 根目录
+mkdir db && cd db && touch db.js
+```
+
+根据数据库初始化配置初始化`mysql`连接,因为这里的exec执行数据库操作是异步的，可以引入`promise`向外暴露一个`promise`来解决,向外暴露一个接受sql执行的数据操作的函数
+
+```
+
+```
+
+ 这里是`mysq`l的一个单例模式的操作，不能关闭mysql连接，否则后续无法操作数据库                
+
+
+
+## 修改接口处理数据库返回的promsie
+
+之前的接口数据都是模拟的，现在需要到数据库查询，修改`controller`中的查询数据库的接口，以`getList`为例
+
+以为`getLIST`返回的是一个`promise`路由处理
+
+```js
+ const result = getList(author, keyword)
+        return result.then(listData => {
+            return new SuccessModel(listData)
+        })
+```
+
+这里`.then`返回的也是`promise`，在下面的 `1handleBlogRouter`接收
+
+```js
+const blogResult = handleBlogRouter(req, res)  //
+if (blogResult) {
+    blogResult.then(blogData => {
+    res.end(JSON.stringify(blogData))
+    })
+    ret  urn
+}
+```
+
+**获取详情**
+
+修改根据ID获取,注意查询exec执行返回的是一个数组，这里因为根据iD查询返回的结果只有一个，所以直接把他从数组中取出来，返回一个对象,
+
+```
+return exec(sql).then(rows=>{
+     return rows[0]
+})
+```
+
+最终返回的也是一个promise
+
+**更新博客**
+
+更新博客标题和内容
+
+**删除博客**
+
+注意sql函数返回不再是`exec()`执行后的结果
+
+```js
+ return exec(sql).then(deleteData => {
+      
+        if (deleteData.affectedRows > 0) {
+            return true
+        }
+        return false
+   })
+```
+
+## 用户登录路由
+
+登录使用POST
+
+- 安全
+- 防止跨域的一些问题
+
+因为根据用户名和密码查询返回一个数据，所以直接从数组中取回来，没有直接返回一个空的对象
+
+```js
+ return exec(sql).then(rows=>{
+ 	return rows[0] || {}
+ })
+```
+
+获取用户名和密码使用ES6的解析析构的方法
+
+```js
+const {username, password} = req.body
+```
+
+## server获取cookie操作cookie
+
+ 判断`cookie`中是否有`username`来判断用户是否登录
+
+**server端获取cookie**
+
+`cookie`默认的形式为  // `k1=v1;k2=v2;k3=v3`,将键值对转化为对象的`key value`
+
+将客户端传过来的`cookie`添加到`req`的`cookie`属性
+
+```js
+req.cookie = {}
+const cookieStr = req.headers.cookie || '' //k1=v1;k2=v2
+cookieStr.split(';').forEach(item => {
+	if (!item) {
+		return
+	}
+	const arr = item.split('=')
+	const key = arr[0]
+	const val = arr[1]
+	req.cookie[key] = val
+})
+```
+
+设置`cookie`
+
+```
+res.setHeader('Set-Cookie', `username=${userData.username}; path=/`)
+```
+
+默认path是路由 如`localhost:8000/api/user/login`,这里不设置为根目录，那么默认的就是 `/api/user/login`
+
+但是`cookie`前端可以更改，比如张三已经登录了，然后后端返回一个`cookie`，后面通过cookie判断用户身份的时候，如果前端修改`cookie`,将`username`改为张三，伪造张三身份，所以`server`端限制前端`cookie`
+
+```
+res.setHeader('Set-Cookie', `username=${userData.username}; path=/;httpOnly`)
+```
+
+前端虽然可以改，但是后面的会覆盖
+
+**httpOnly生效**
+
+![](./jpg/cookie)
+
+查看cookie
+
+![](./jpg/cookie2)
+
+操作cookie
+
+![](./jpg/cookie3)
+
+
+
+## session 
+
+cookie暴露用户名很危险，这样可以不存储用户名而是存储id，后端可以对应用户名和密码，这样就用到session了
+
+session就是用户登录后会给用户返回一个cookie，这个cookie包含一个sessionid,第一次用户登录成功后将用户信息赋值给这个sesssionID
+
+以后每次登录根据这个sessionID来判断用户身份
+
+具体逻辑如下：
+
+- 服务器需要给用户返回一个sessioniD随机生成
+- 这个sessionID对应着用户的信息，真正的用户信息保存在服务端
+- 用户第一次登录时需要设置sessionID
+- 用户之后登录时需要根据sessionID找打用户的session信息
+- 判断用户登录可以通过res.session判断
+
+
+
+## redis
+
+`session`问题是存在在内存中
