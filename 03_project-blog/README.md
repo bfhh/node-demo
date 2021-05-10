@@ -364,3 +364,40 @@ session就是用户登录后会给用户返回一个cookie，这个cookie包含�
 ## redis
 
 `session`问题是存在在内存中
+
+
+
+## 操作redis
+
+- redis数据库配置
+
+- 封装如何操作redis数据库的函数
+
+`redis`的`key`和`val`都必须是字符串
+
+**set函数**
+
+做如下处理，如果是一个对象，那么默认会做onject.tostring()处理，所以这里转化为json格式的字符串
+
+```
+if (typeof val === 'object') {
+        val = JSON.parse(val)
+    }
+```
+
+**get函数**
+
+是一个异步操作，必须返回`promsie`
+
+  ```js
+  try {
+  	resolve(JSON.parse(val))
+  } catch (ex) {
+  	resolve(val)
+  }
+  ```
+
+如果能解析成对象就返回对象，不是的话直接返回
+
+  
+
