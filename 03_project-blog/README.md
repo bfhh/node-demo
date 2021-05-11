@@ -144,8 +144,7 @@ create database myblog;
 create table `myblog`.`users` (
 	`id` int not null AUTO_INCREMENT,
 	`username` VARCHAR(20) not null,
-	`password` varchar(20) not null,	
-	`realname` VARCHAR(20) NOT NULL,
+	`password` varchar(32) not null,	
 	PRIMARY KEY (`id`));
 )
 ```
@@ -404,7 +403,154 @@ if (typeof val === 'object') {
   }
   ```
 
-如果能解析成对象就返回对象，不是的话直接返回
+如果能解析成对象就返回对象，不是的话直接返回$#
 
-  
+## nginx联调
 
+**nginx配置**
+
+配置线程数量 ` worker_processes ` 可根据电脑的`CPU`进行设置
+
+```
+
+#user  nobody;
+worker_processes  1;
+
+#error_log  logs/error.log;
+#error_log  logs/error.log  notice;
+#error_log  logs/error.log  info;
+
+#pid        logs/nginx.pid;
+```
+
+修改代理端口
+
+```
+location / {
+	proxy_pass http://localhost:8001;
+}
+
+location /api/ {
+	proxy_pass http://localhost:8000;
+	proxy_set_header Host $host;
+}
+```
+
+**window nginx启动**
+
+**启动**
+
+```
+./nginx.exe			
+```
+
+修改配置文件后验证配置文件
+
+```
+./nginx.exe -t 
+```
+
+**重启`nginx`**
+
+```
+./nginx -s reload
+```
+
+## 安全
+
+### **sql注入**
+
+**例子**
+
+```
+select * from users where username='zhangsan' and password='123';
+```
+
+只知道用户名就可以登录进去使用`--` `mysql`注释
+
+```
+select * from users where username='zhangsan'-- and password='122323';
+```
+
+**解决办法**
+
+`mysql escape`,原理其实就是对特殊字符进行了转义处理
+
+```
+const mysql = require('msyql')
+module.exports={
+	escape: mysql.escape
+}
+```
+
+**防止sql注入攻击**
+
+```
+const login = (username, password) => {
+    username = escape(username)
+    password = escape(password)
+    const sql = `
+        select username,realname from users where username=${username} and password=${password}
+    `
+    return exec(sql).then(rows=>{
+        return rows[0] || {}
+    })
+}
+```
+
+注意使用escape只有取值的单引号需要去掉
+
+```
+where username='${username}' and password='${password}'
+```
+
+改成
+
+```
+where username=${username} and password=${password}
+```
+
+**XSS攻击**
+
+主要是要用户输入一些脚本信息获取用户的一些信息
+
+```
+const {xss} = require('xss')
+```
+
+解决方案就是对`js`文本进行处理，屏蔽`js`的攻击能力
+
+```
+XSS(传过来的文本)
+```
+
+**密码加密**
+
+数据库万一被攻破,用户名和密码如果是明文存储不安全，所以需要加密存储
+
+```
+const crypto = require('crypto')
+
+//随机设置密匙
+const SECRET_KEY = 'QWERdf_123456@'
+
+//md5加密
+
+function md5(content) {
+    let md5 = crypto.createHash('md5')
+    return md5.update(content).digest('hex')
+
+}
+
+//加密函数
+function genPassword(password) {
+	//随意设置拼接的字符串
+    const str = `password=${password}&key=${SECRET_KEY}`
+    return md5(str)
+}
+
+```
+
+## 修改登录验证密码
+
+这里假设用户已经注册，注册存储的密码也是加密过的
