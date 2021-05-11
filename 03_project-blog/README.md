@@ -363,4 +363,10 @@ session就是用户登录后会给用户返回一个cookie，这个cookie包含�
 
 ## redis
 
-`session`问题是存在在内存中
+`session`问题是存在在内存中,
+
+`redis` 和`mysq`l
+
+- `APP.JS`访问及其频繁，对性能要求极高
+- `session`也可以不考虑断电数据丢失的问题
+- `session`一般不会太大
