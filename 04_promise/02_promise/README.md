@@ -24,11 +24,11 @@ function getFileContent(fileName) {
 ```js
 getFileContent('a.json').then(aData => {
         console.log('aData', aData)
-        return getFileContent(aData.next())
+        return getFileContent(aData.next
     }
 ).then(bData => {
     console.log('bData', bData)
-    return getFileContent(bData.next())
+    return getFileContent(bData.next
 }).then(cData => {
     console.log('cData', cData)
 })
