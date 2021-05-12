@@ -178,6 +178,12 @@ insert into  blogs(title,content,createtime,author)	values('标题A','内容A',1
 insert into  blogs(title,content,createtime,author)	values('标题B','内容B',1620608004165,'lisi');
 ```
 
+**修改表结构**
+
+```
+alter table powerdata.`21` rename to powerdata.`c3205008012m21`;
+```
+
 ## 初始化数据库配置
 
 首先根据`PACKAGE.JSON`中使用process判断当前的执行环境，线上还是测试
