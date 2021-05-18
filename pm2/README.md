@@ -133,3 +133,13 @@ C:\Users\Administrator\.pm2\logs\app-error.log last 15 lines:
 }
 ```
 
+修改`package.json`文件
+
+```
+ "scripts": {
+    "start": "node ./bin/www",
+    "dev": "cross-env NODE_ENV=dev nodemon ./bin/www",
+    "prd": "cross-env NODE_ENV=production pm2 pm2.config.json"
+  },
+```
+
