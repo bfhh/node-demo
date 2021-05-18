@@ -1,7 +1,7 @@
 {
   "apps": {
-    "name": "xiexinapp",
-    "script": "app.js",
+    "name": "xiexin",
+    "script": "bin/www",
     "watch": true,
     "ignore_watch": [
       "node_modules",
