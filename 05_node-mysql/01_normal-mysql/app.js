@@ -13,7 +13,6 @@ con.connect()
 //select
 const sql = `select *from users;`
 
-
 con.query(sql, (err, result) => {
     if (err) {
         console.error(err)
@@ -21,3 +20,4 @@ con.query(sql, (err, result) => {
     }
     console.log(result)
 })
+

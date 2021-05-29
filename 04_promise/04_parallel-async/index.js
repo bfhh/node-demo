@@ -5,26 +5,13 @@ function sleep(time) {
     }
 }
 
-const names = [
-    {
-        "name": 1,
-        "time": 5000
-    },
-    {
-        "name": 2,
-        "time": 1000
-    },
-    {
-        "name": 3,
-        "time": 1000
-    },
-]
-
-const getData = (x) => {
+const names = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+// const names2 = ['11', '12', '13', '14', '15', '16', '17', '18', '19', '20']
+const getData = (name) => {
     return new Promise((resolve, reject) => {
-        sleep(x.time)
-        console.log('getData name', x.name)
-        resolve(x.name)
+        console.log('getData name', name)
+        sleep()
+        resolve(name)
     })
 }
 
