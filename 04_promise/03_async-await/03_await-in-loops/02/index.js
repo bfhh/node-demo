@@ -8,8 +8,7 @@ const getData = (name) => {
 }
 
 async function getDataById(id) {
-    const response = await getData(id)
-    return await response
+    return await getData(id);
 }
 
 

@@ -1,10 +1,10 @@
 const moment = require('moment');
 
-// console.log(moment('20210602').startOf('month').format('YYYYMMDD')); //
-// console.log(moment('20210612').endOf('month').format('YYYYMMDD')); //
-//
-// console.log(moment('20210605').startOf('year').format('YYYYMMDD')); //
-// console.log(moment('20190305').endOf('year').format('YYYYMMDD')); //
+console.log(moment('2021').startOf('month').format('YYYYMMDD')); //
+console.log(moment('2021').endOf('month').format('YYYYMMDD')); //
+
+console.log(moment('2020').startOf('year').format('YYYYMMDD')); //
+console.log(moment('2019').endOf('year').format('YYYYMMDD')); //
 
 
 const getYearFirstLastDay = (time) => {
@@ -20,3 +20,4 @@ const getMonthFirstLastDay = (time) => {
     monthRes.endTime = (moment(time).endOf('month').format('YYYYMMDD'))
     return monthRes
 }
+
