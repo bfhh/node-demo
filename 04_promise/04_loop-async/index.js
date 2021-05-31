@@ -22,15 +22,12 @@ async function getDataById(id) {
 
 const showColumnInfo = async (names = []) => {
     const promises = names.map(x => getDataById(x));
-    console.log(await Promise.all(promises));
-
-    // for (const promise of promises) {
-    //     const column = await promise
-    //     console.log(`Name: ${column}`)
-    // }
-    // return 'success'
-
+    return await Promise.all(promises)
 };
 
-showColumnInfo(names)
+showColumnInfo(names).then(data=>{
+    console.log("data",data)
+    }
+)
+console.log(1)
 

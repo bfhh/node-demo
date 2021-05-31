@@ -6,3 +6,5 @@ function timestampToYMD(time = Date.now()) {
 console.log(timestampToYMD().substr(0, 12).trim()); // "20210520000017"
 
 //Intercept string
+//substr The second parameter is the length
+//substring The second parameter is the index
