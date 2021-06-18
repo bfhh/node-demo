@@ -94,6 +94,27 @@ const updateBlog = (id, blogData = {}) => {
 //删除博客
 const deleteBlog = (id, author) => {
     const sql = `delete from blogs where id=${id} and author = '${author}'`
+    return exec(sql).then(rows => {
+        return rows
+    })
+}
+
+//查询字段作为变量
+// const getPsData = (tableName, columnItem, date) => {
+//     let querySql = 'select ' + `${columnItem},` + ' time from`' + `${tableName}` + '` where 1=1 '
+//     const interval = getDateInterval(date)
+//     if (interval.startTime !== "" && interval.endTime !== "") {
+//         querySql += `and time BETWEEN ${interval.startTime} AND ${interval.endTime} `
+//     }
+//     console.log('sql---', querySql)
+//     return exec(querySql)
+// }
+
+
+
+//查询某个字段最大值
+const getMaxData = (column) => {
+    const sql = `select max(${column}) from blogs where 1=1 `
     return exec(sql).then(deleteData => {
         console.log('deleteBlog...', deleteData)
         if (deleteData.affectedRows > 0) {

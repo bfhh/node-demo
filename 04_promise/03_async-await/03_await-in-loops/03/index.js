@@ -21,10 +21,8 @@ const showColumnInfo = async () => {
     }
 };
 
-// showColumnInfo()
-//
-//
-// console.log("123")
+showColumnInfo()
+
 
 let a = []
 

@@ -10,9 +10,6 @@ const con = mysql.createConnection({
 
 con.connect()
 
-
-
-
 //select
 const sql = `select *from users;`
 

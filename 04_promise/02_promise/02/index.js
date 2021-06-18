@@ -30,7 +30,7 @@ const getData = (x) => {
 
 async function getDataById(id) {
     const response = await getData(id)
-    return await response
+    return response;
 }
 
 const showColumnInfo = async (names = []) => {

@@ -10,11 +10,13 @@ const con = mysql.createConnection({
 
 con.connect()
 
-
-
-
 //select
 const sql = `select *from users;`
+//select
+/*
+const sql = `select ${columnItem} as min,time as mintime from  ${tableName} where ${columnItem}= (select  min(${columnItem})  from ${tableName}  where 1=1 `
+sql += `and time BETWEEN ${start.startTime} AND ${end.endTime})`
+*/
 
 con.query(sql, (err, result) => {
     if (err) {
