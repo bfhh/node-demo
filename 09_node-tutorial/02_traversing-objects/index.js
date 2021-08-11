@@ -1,4 +1,4 @@
-const obj = {
+let obj = {
     'person1': {
         "name": "kobe",
         "age": 29
