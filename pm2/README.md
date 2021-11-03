@@ -4,6 +4,36 @@
 npm install -g pm2
 ```
 
+**pm2踩坑**
+
+安装完毕后验证是否配置全局变量
+
+```
+pm2
+```
+
+显示正常安装完成，
+
+异常：找不到pm2,没有配置全局变量
+
+- 配置pm2全局变量即可
+
+- 也可以加入到 /url/local/bin
+
+```
+$ npm config get prefix  查看安装目录
+/root/soft/node-v14.17.5-linux-x64
+
+$ cd /root/soft/node-v14.17.5-linux-x64/bin
+
+$ ls
+cnpm  node  npm  npx  pm2  pm2-dev  pm2-docker  pm2-runtime
+
+$ sudo  ln  -s /root/soft/node-v14.17.5-linux-x64/bin/pm2    /usr/local/bin      
+```
+
+
+
 ## 初始化项目
 
 ```
@@ -120,7 +150,7 @@ C:\Users\Administrator\.pm2\logs\app-error.log last 15 lines:
 {
   "apps": {
     "name": "xiexinapp",				   //app名称
-    "script": "/bin/www",					   //启动入口
+    "script": "/bin/www",				   //启动入口
     "watch": true,						   //项目文件变化自动重启
     "ignore_watch": [					   //配置哪些文件变化不重启
       "node_modules",
@@ -139,7 +169,9 @@ C:\Users\Administrator\.pm2\logs\app-error.log last 15 lines:
  "scripts": {
     "start": "node ./bin/www",
     "dev": "cross-env NODE_ENV=dev nodemon ./bin/www",
-    "prd": "cross-env NODE_ENV=production pm2 pm2.config.json"
+    "prd": "cross-env NODE_ENV=production pm2 start pm2.config.json"
   },
 ```
+
+
 

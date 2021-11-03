@@ -1,8 +1,3 @@
-
-
-
-
-
 const EthCrypto = require('eth-crypto');
 // const identity = EthCrypto.createIdentity();
 //
@@ -23,9 +18,6 @@ const privateKeyToAddr = (privateKey) => {
     let address = EthCrypto.publicKey.toAddress(publicKey);
     return address
 }
-
-
-
 
 let prikey = '8a5b4fd0ada3c38451c222c64db4277e62f655330e7f7bfc20f98f3b4a7208e3'
 

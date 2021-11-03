@@ -1,4 +1,4 @@
-const base64Str = 'gzChPWgZo4Q+sqxB6LJ/aYssJePrV/FgZQtrffsr7EE='
+const base64Str = 'Ji6jKQ+YlmtoMUyDc2Bab5WOjt8PW8so5J2PoMtEFoM='
 
 const buffer = Buffer.from(base64Str, 'base64');
 const hexString = buffer.toString('hex');

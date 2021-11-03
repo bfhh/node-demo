@@ -1,5 +1,4 @@
 //很方便的产生私钥，公钥，地址
-
 const EthCrypto = require('eth-crypto');
 
 const identity = EthCrypto.createIdentity();
