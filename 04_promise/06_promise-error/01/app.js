@@ -3,7 +3,7 @@ const path = require('path')
 
 function getFileContent(fileName) {
     return new Promise((resolve, reject) => {
-        const fullName = path.resolve(__dirname, 'file2s', fileName)
+        const fullName = path.resolve(__dirname, 'files', fileName)
         fs.readFile(fullName, (err, data) => {
             if (err) {
                 reject(err)
@@ -14,7 +14,7 @@ function getFileContent(fileName) {
     })
 }
 
-getFileContent('a.json').then(aData => {
+getFileContent('a1.json').then(aData => {
         console.log('aData', aData)
         return getFileContent(aData.next)
     }

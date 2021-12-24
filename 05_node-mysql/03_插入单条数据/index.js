@@ -10,7 +10,12 @@ const con = mysql.createConnection({
 
 con.connect()
 
-const sql = `select * from user;`
+let username = "alice"
+let age = 100
+
+const sql = `insert into user (username,age) values` + `('${username}',${age})`
+console.log("sql", sql)
+
 
 
 con.query(sql, (err, result) => {

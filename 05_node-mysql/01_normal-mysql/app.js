@@ -10,11 +10,16 @@ const con = mysql.createConnection({
 
 con.connect()
 
-
-
-
 //select
-const sql = `select *from users;`
+const sql = ""
+
+
+
+
+const insertSql = `insert into block_tx (block_height, tx_hash, account_from, account_to, timestamp) values` + `(${block_height},'${tx_hash}','${from}','${to}',${timestamp})`
+console.log("sql", insertSql)
+
+
 
 con.query(sql, (err, result) => {
     if (err) {
